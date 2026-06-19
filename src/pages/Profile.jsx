@@ -44,7 +44,7 @@ const Profile = () => {
         setFormData(prev => ({
           ...prev,
           name: data.profile.name || currentUser?.displayName || '',
-          email: data.profile.email || currentUser?.email || '',
+          email: currentUser?.email || data.profile.email || '',
           phone: data.profile.phone || '',
           address: data.profile.address || '',
           city: data.profile.city || '',
@@ -187,7 +187,7 @@ const Profile = () => {
 
               <div className="profile-header-info">
                 <h2>{getDisplayName()}</h2>
-                <p className="profile-email">{formData.email}</p>
+                <p className="profile-email">{currentUser?.email || formData.email}</p>
                 <div className="profile-role-badge">
                   {isAdmin ? <><FiShield /> Admin</> : <><FiUser /> User</>}
                 </div>
@@ -234,7 +234,7 @@ const Profile = () => {
                   <input
                     type="email"
                     className="form-input"
-                    value={formData.email}
+                    value={currentUser?.email || formData.email}
                     disabled
                     style={{ background: 'var(--gray-100)', cursor: 'not-allowed' }}
                   />

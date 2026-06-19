@@ -5,15 +5,12 @@
    ============================================ */
 
 .login-page {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  width: 100%;
   display: flex;
-  overflow: hidden;
   z-index: 9999;
   font-family: 'Outfit', sans-serif;
-  background: #f8f9fa; /* Clean background behind the white card's rounded corners */
+  background: #f8f9fa;
 }
 
 /* Dynamic Backgrounds on LEFT SIDE ONLY (using the correct .png filenames) */

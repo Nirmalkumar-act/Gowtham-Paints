@@ -399,15 +399,44 @@
 
 @media (max-width: 480px) {
   .navbar-inner {
-    padding: 0 var(--space-md);
+    padding: 0 var(--space-xs);
+  }
+
+  .navbar-logo {
+    gap: var(--space-xs);
   }
 
   .navbar-logo-text {
-    font-size: var(--text-base);
+    font-size: var(--text-sm);
+  }
+
+  .navbar-logo-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+
+  .navbar-actions {
+    gap: var(--space-xs);
+  }
+
+  .notification-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+  }
+
+  .nav-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .hamburger {
+    padding: 4px;
   }
 
   .notification-dropdown {
-    width: calc(100vw - 32px);
-    right: -100px;
+    width: calc(100vw - 16px);
+    right: -60px;
   }
 }
