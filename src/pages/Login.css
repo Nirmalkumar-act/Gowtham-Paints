@@ -1,0 +1,413 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
+
+/* ============================================
+   LOGIN PAGE STYLES (Mockup Exact Match)
+   ============================================ */
+
+.login-page {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+  z-index: 9999;
+  font-family: 'Outfit', sans-serif;
+  background: #f8f9fa; /* Clean background behind the white card's rounded corners */
+}
+
+/* Dynamic Backgrounds on LEFT SIDE ONLY (using the correct .png filenames) */
+.layout-login .login-branding {
+  background: url('/login_bg.png') center top/cover no-repeat;
+}
+.layout-signup .login-branding {
+  background: url('/signup_bg.png') center top/cover no-repeat;
+}
+
+/* ---------- Branding Side (Left) ---------- */
+.login-branding {
+  display: none;
+  position: relative;
+  flex: 1.2;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem;
+  z-index: 2;
+}
+
+@media (min-width: 900px) {
+  .login-branding {
+    display: flex;
+  }
+}
+
+.branding-content {
+  max-width: 500px;
+  animation: slideInLeft 0.8s ease;
+}
+
+/* Dynamic Branding Text Colors */
+.layout-login .branding-content { color: white; }
+.layout-signup .branding-content { color: #1e1e2f; }
+
+.branding-logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.branding-logo h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.branding-content h1 {
+  font-size: 4rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  line-height: 1.1;
+}
+
+/* The cursive/script word in the mockup */
+.branding-content h1 span.script-font {
+  font-family: 'Brush Script MT', cursive; /* or a nice web font */
+  font-weight: normal;
+  font-size: 4.5rem;
+}
+.layout-login .branding-content h1 span.script-font { color: #facc15; /* Yellow/Orange */ }
+.layout-signup .branding-content h1 span.script-font { color: #f97316; /* Orange/Pink */ }
+
+.branding-tagline {
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.6;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+}
+
+/* Badges (Login Screen) */
+.branding-badges {
+  display: flex;
+  gap: 1.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  padding: 1rem 1.5rem;
+  border-radius: 50px;
+  width: fit-content;
+}
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* ---------- Form Side (Right) ---------- */
+.login-form-wrapper {
+  flex: 1;
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.login-form-container {
+  width: 100%;
+  max-width: 500px;
+  background: white;
+  border-radius: 40px; /* Highly rounded like the mockup */
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  padding: 3.5rem;
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.5s ease;
+}
+
+/* Corner Paint Splashes (Optional) */
+
+.form-content-inner {
+  position: relative;
+  z-index: 2; /* keep above splashes */
+}
+
+/* ---------- Header ---------- */
+.login-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.login-header h2 {
+  color: #1e1e2f;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.login-header p {
+  color: #888;
+  font-size: 0.95rem;
+}
+
+/* ---------- Grid Layout for Signup ---------- */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+/* ---------- Minimalist Inputs ---------- */
+.login-form .form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 0;
+  color: #888;
+  font-size: 1.1rem;
+}
+
+.form-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #eaeaea;
+  color: #333;
+  padding: 0.75rem 0 0.75rem 2rem; /* space for icon */
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.form-input::placeholder {
+  color: #aaa;
+}
+
+/* Dynamic Focus Colors */
+.layout-login .form-input:focus { border-bottom-color: #4f46e5; }
+.layout-signup .form-input:focus { border-bottom-color: #ec4899; }
+
+.form-input.error { border-bottom-color: #ef4444 !important; }
+.form-input.success { border-bottom-color: #10b981 !important; }
+
+.password-toggle {
+  position: absolute;
+  right: 0;
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+.password-toggle:hover { color: #666; }
+
+/* ---------- Form Extras (Checkbox & Forgot Password) ---------- */
+.form-extras {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  font-size: 0.85rem;
+}
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
+  cursor: pointer;
+}
+.checkbox-group input {
+  width: 16px;
+  height: 16px;
+  accent-color: #4f46e5;
+  cursor: pointer;
+}
+.forgot-password {
+  color: #4f46e5;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.terms-text {
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+/* ---------- Buttons ---------- */
+.login-submit {
+  width: 100%;
+  padding: 1rem;
+  color: white;
+  border: none;
+  border-radius: 50px; /* highly rounded */
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.layout-login .login-submit {
+  background: linear-gradient(to right, #4f46e5, #8b5cf6);
+  box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+}
+.layout-signup .login-submit {
+  background: linear-gradient(to right, #ec4899, #8b5cf6);
+  box-shadow: 0 10px 20px rgba(236, 72, 153, 0.3);
+}
+
+.login-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+}
+.login-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: translateY(0);
+}
+
+/* ---------- Divider ---------- */
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #eaeaea;
+}
+.login-divider span {
+  color: #aaa;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* ---------- Google Button ---------- */
+.google-btn {
+  width: 100%;
+  padding: 0.85rem;
+  background: white;
+  border: 1px solid #eaeaea;
+  color: #333;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+}
+.google-btn:hover:not(:disabled) {
+  background: #fcfcfc;
+  border-color: #ddd;
+}
+
+/* ---------- Footer ---------- */
+.login-footer {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #888;
+}
+.login-footer span {
+  font-weight: 700;
+  cursor: pointer;
+}
+.layout-login .login-footer span { color: #4f46e5; }
+.layout-signup .login-footer span { color: #ec4899; }
+.login-footer span:hover { text-decoration: underline; }
+
+/* ---------- Error Form Texts ---------- */
+.form-error {
+  color: #ef4444;
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+  position: absolute;
+  bottom: -20px;
+}
+
+.login-alert {
+  padding: 0.85rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.login-alert.error { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; }
+.login-alert.success { background: #f0fdf4; color: #10b981; border: 1px solid #bbf7d0; }
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: rotate 0.8s linear infinite;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 899px) {
+  .login-page {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .login-branding {
+    display: flex;
+    flex: none;
+    padding: 3rem 2rem;
+    height: auto;
+  }
+  .branding-badges {
+    display: none; /* Hide badges on mobile to save space */
+  }
+  .login-form-wrapper {
+    padding: 1rem;
+    align-items: flex-start;
+  }
+  .login-form-container {
+    padding: 2rem;
+    border-radius: 30px;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Animations ---------- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
