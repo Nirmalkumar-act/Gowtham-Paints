@@ -6,8 +6,10 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
 
-// Admin email constant
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'tamilnk145@gmail.com';
+// Admin emails
+const ADMIN_EMAILS = process.env.ADMIN_EMAIL 
+  ? process.env.ADMIN_EMAIL.split(',').map(e => e.trim().toLowerCase()) 
+  : ['tamilnk145@gmail.com', 'gowthanajith@gmail.com'];
 
 // POST /api/auth/sync - Sync Firebase user to MySQL
 router.post('/sync', async (req, res) => {
@@ -18,8 +20,8 @@ router.post('/sync', async (req, res) => {
       return res.status(400).json({ message: 'Firebase UID and email are required' });
     }
 
-    // Determine role - admin email always gets admin role
-    const isAdminEmail = email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+    // Determine role - admin emails get admin role
+    const isAdminEmail = ADMIN_EMAILS.includes(email.toLowerCase());
     const role = isAdminEmail ? 'admin' : 'user';
 
     // Check if user exists by firebase_uid
