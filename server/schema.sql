@@ -2,8 +2,7 @@
 -- GOWTHAM PAINTS - Database Schema
 -- ============================================
 
-CREATE DATABASE IF NOT EXISTS gowtham_paints;
-USE gowtham_paints;
+
 
 -- Users table
 CREATE TABLE IF NOT EXISTS users (

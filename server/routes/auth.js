@@ -79,8 +79,10 @@ router.get('/role', async (req, res) => {
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const token = authHeader.split(' ')[1];
       try {
-        // Decode the JWT payload (Firebase tokens are JWTs)
-        const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+        // Decode the JWT payload (Firebase tokens are JWTs - Base64URL encoded)
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const payload = JSON.parse(Buffer.from(base64, 'base64').toString());
         userEmail = payload.email;
         firebaseUid = payload.user_id || payload.sub;
       } catch (e) {

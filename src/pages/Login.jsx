@@ -154,17 +154,7 @@ const Login = () => {
 
     if (hasErrors) return;
 
-    if (role === 'admin') {
-      const adminEmail = 'tamilnk145@gmail.com';
-      const adminPassword = 'Nirmal12345@';
-
-      if (mode === 'login') {
-        if (formData.email !== adminEmail || formData.password !== adminPassword) {
-          setGeneralError('Invalid admin credentials. Access Denied.');
-          return;
-        }
-      }
-    }
+    // Removed hardcoded admin check to rely on backend validation
 
     setIsSubmitting(true);
     isLoggingIn.current = true;
@@ -173,14 +163,6 @@ const Login = () => {
       if (mode === 'login') {
         const { user, error } = await loginWithEmail(formData.email, formData.password);
         if (error) {
-          if (role === 'admin' && formData.email === 'tamilnk145@gmail.com') {
-            const reg = await registerWithEmail(formData.email, formData.password, "Gowtham Admin");
-            if (!reg.error) {
-              setSuccessMessage('Admin Initialized! Redirecting...');
-              setTimeout(() => navigate('/admin/bookings'), 1000);
-              return;
-            }
-          }
           setGeneralError(getFriendlyErrorMessage(error));
         } else if (user) {
           // Full page reload triggers the splash screen in App.jsx

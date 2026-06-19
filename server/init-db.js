@@ -1,14 +1,17 @@
+require('dotenv').config();
 const mysql = require('mysql2/promise');
 const fs = require('fs');
 const path = require('path');
 
 async function initDb() {
   try {
-    // Connect without database selected
     const connection = await mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: 'nirmal',
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      port: process.env.DB_PORT || 3306,
+      ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : undefined,
       multipleStatements: true
     });
 
