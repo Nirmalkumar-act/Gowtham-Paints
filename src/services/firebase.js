@@ -122,6 +122,19 @@ export const registerWithEmail = async (email, password, displayName) => {
   }
 };
 
+export const resetPassword = async (email) => {
+  try {
+    const { sendPasswordResetEmail } = await import('firebase/auth');
+    await sendPasswordResetEmail(auth, email);
+    return { error: null };
+  } catch (error) {
+    let message = 'Failed to send password reset email.';
+    if (error.code === 'auth/user-not-found') message = 'No account found with this email.';
+    if (error.code === 'auth/invalid-email') message = 'Invalid email address.';
+    return { error: message };
+  }
+};
+
 export const logoutUser = async () => {
   try {
     await signOut(auth);

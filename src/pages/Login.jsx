@@ -8,7 +8,8 @@ import { useAuth } from '../context/AuthContext';
 import {
   signInWithGoogle,
   loginWithEmail,
-  registerWithEmail
+  registerWithEmail,
+  resetPassword
 } from '../services/firebase';
 import { validators } from '../utils/validators';
 import { FiEye, FiEyeOff, FiAlertCircle, FiCheck, FiMail, FiLock, FiUser, FiAward, FiSettings, FiShield } from 'react-icons/fi';
@@ -229,6 +230,27 @@ const Login = () => {
     }
   };
 
+  const handleForgotPassword = async () => {
+    if (!formData.email) {
+      setGeneralError('Please enter your email address first.');
+      return;
+    }
+    setGeneralError('');
+    setIsSubmitting(true);
+    try {
+      const { error } = await resetPassword(formData.email);
+      if (error) {
+        setGeneralError(error);
+      } else {
+        setSuccessMessage('Password reset email sent. Please check your inbox.');
+      }
+    } catch (err) {
+      setGeneralError('Failed to send reset email.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="login-page" style={{ alignItems: 'center', justifyContent: 'center', background: '#0f172a' }}>
@@ -375,7 +397,7 @@ const Login = () => {
                     <input type="checkbox" />
                     <span>Remember me</span>
                   </label>
-                  <span className="forgot-password" style={{cursor: 'pointer'}} onClick={() => {}}>
+                  <span className="forgot-password" style={{cursor: 'pointer'}} onClick={handleForgotPassword}>
                     Forgot Password?
                   </span>
                 </div>
