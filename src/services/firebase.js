@@ -21,12 +21,12 @@ import {
 
 // Firebase config - Replace with your own Firebase project config
 const firebaseConfig = {
-  apiKey: "AIzaSyDR46Qcych63izyyXDa832YDdiVjy4TUzw",
-  authDomain: "gowtham-paints.firebaseapp.com",
-  projectId: "gowtham-paints",
-  storageBucket: "gowtham-paints.firebasestorage.app",
-  messagingSenderId: "309878881884",
-  appId: "1:309878881884:web:088cb379c011729116b099",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
   measurementId: "G-X6THL6NXZV"
 };
 
