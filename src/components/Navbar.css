@@ -317,7 +317,7 @@
   display: block;
   width: 24px;
   height: 2px;
-  background: var(--dark);
+  background: var(--primary);
   border-radius: 2px;
   transition: all var(--transition-base);
 }
@@ -351,23 +351,35 @@
   .navbar-links.mobile-open {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     position: fixed;
     top: 72px;
     left: 0;
     right: 0;
-    bottom: 0;
-    background: rgba(255, 248, 240, 0.98);
-    backdrop-filter: blur(20px);
+    height: calc(100vh - 72px);
+    background-color: #FFF8F0 !important;
+    opacity: 1 !important;
     padding: var(--space-lg);
-    gap: var(--space-xs);
+    gap: var(--space-sm);
     animation: fadeIn 0.3s ease;
     z-index: var(--z-sticky);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   }
 
   .navbar-links.mobile-open .nav-link {
     padding: 16px;
-    font-size: var(--text-base);
+    font-size: var(--text-lg);
     border-radius: var(--radius-md);
+    color: var(--dark);
+    font-weight: 700;
+    text-align: center;
+    justify-content: center;
+  }
+  
+  .navbar-links.mobile-open .nav-link:hover,
+  .navbar-links.mobile-open .nav-link.active {
+    background: rgba(230, 81, 0, 0.1);
+    color: var(--primary);
   }
 
   .mobile-overlay {

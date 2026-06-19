@@ -71,11 +71,11 @@ const Footer = () => {
                 </div>
                 <div className="contact-item">
                   <FiPhone />
-                  <span>+91 98765 43210</span>
+                  <span>+91 95669 22196</span>
                 </div>
                 <div className="contact-item">
                   <FiMail />
-                  <span>info@gowthampaints.com</span>
+                  <span>gowthanajith@gmail.com</span>
                 </div>
               </div>
             </div>
