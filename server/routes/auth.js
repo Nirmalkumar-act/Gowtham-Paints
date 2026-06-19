@@ -7,7 +7,7 @@ const router = express.Router();
 const db = require('../config/db');
 
 // Admin email constant
-const ADMIN_EMAIL = 'tamilnk145@gmail.com';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'tamilnk145@gmail.com';
 
 // POST /api/auth/sync - Sync Firebase user to MySQL
 router.post('/sync', async (req, res) => {
