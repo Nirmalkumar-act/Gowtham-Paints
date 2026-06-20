@@ -122,6 +122,26 @@
   gap: var(--space-md);
 }
 
+.desktop-lang-toggle {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: bold;
+  border: 1px solid var(--gray-200);
+  background: white;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--dark);
+  transition: all var(--transition-base);
+}
+
+.desktop-lang-toggle:hover {
+  background: var(--gray-100);
+}
+
+.mobile-lang-toggle {
+  display: none;
+}
+
 /* ---------- Notification Bell ---------- */
 .notification-wrapper {
   position: relative;
@@ -380,6 +400,28 @@
   .navbar-links.mobile-open .nav-link.active {
     background: rgba(230, 81, 0, 0.1);
     color: var(--primary);
+  }
+
+  .desktop-lang-toggle {
+    display: none;
+  }
+
+  .mobile-lang-toggle {
+    display: block;
+    margin-top: var(--space-md);
+    padding: 12px;
+    font-size: var(--text-base);
+    font-weight: bold;
+    border: 1px solid var(--gray-200);
+    background: white;
+    border-radius: var(--radius-md);
+    color: var(--dark);
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .mobile-lang-toggle:hover {
+    background: var(--gray-100);
   }
 
   .mobile-overlay {

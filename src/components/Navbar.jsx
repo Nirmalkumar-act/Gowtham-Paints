@@ -138,6 +138,12 @@ const Navbar = () => {
             <NavLink to="/profile" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
               <FiUser className="nav-link-icon" /> {t('nav_profile')}
             </NavLink>
+            <button 
+              onClick={() => { toggleLanguage(); setMobileOpen(false); }} 
+              className="mobile-lang-toggle" 
+            >
+              {language === 'en' ? 'தமிழ்' : 'English'}
+            </button>
           </div>
 
           {/* Actions */}
@@ -146,8 +152,7 @@ const Navbar = () => {
             {/* Language Toggle */}
             <button 
               onClick={toggleLanguage} 
-              className="btn btn-sm btn-secondary" 
-              style={{ padding: '6px 12px', fontSize: '13px', fontWeight: 'bold', border: '1px solid var(--gray-200)', background: 'white' }}
+              className="desktop-lang-toggle" 
               title="Toggle Language"
             >
               {language === 'en' ? 'தமிழ்' : 'English'}

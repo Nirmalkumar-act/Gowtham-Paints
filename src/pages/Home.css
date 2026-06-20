@@ -4,6 +4,7 @@
 
 .home-page {
   padding-top: 72px;
+  overflow-x: hidden;
 }
 
 /* ==================== HERO ==================== */
@@ -103,6 +104,8 @@
   margin-bottom: var(--space-lg);
   color: white;
   animation: fadeInUp 0.8s ease 0.1s both;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .hero-title .highlight {
@@ -119,6 +122,8 @@
   margin-bottom: var(--space-xl);
   max-width: 500px;
   animation: fadeInUp 0.8s ease 0.2s both;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .hero-actions {
@@ -538,6 +543,8 @@
   line-height: 1.7;
   margin-bottom: var(--space-lg);
   font-style: italic;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .testimonial-author {
@@ -692,5 +699,18 @@
 
   .floating-badge {
     display: none;
+  }
+  
+  .paint-color {
+    width: 40px;
+    height: 60px;
+  }
+  
+  .paint-colors-display {
+    gap: 8px;
+  }
+
+  .testimonial-card {
+    min-width: 260px;
   }
 }
