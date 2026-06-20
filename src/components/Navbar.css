@@ -477,9 +477,14 @@
     padding: 4px;
   }
 
+  .notification-wrapper {
+    position: static;
+  }
+
   .notification-dropdown {
     width: calc(100vw - 32px);
-    right: -10px;
+    right: 16px;
+    top: 64px;
     max-width: 350px;
   }
 }
