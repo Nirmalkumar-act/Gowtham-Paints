@@ -5,6 +5,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import {
   signInWithGoogle,
   loginWithEmail,
@@ -21,6 +22,7 @@ import logo from '../assets/logo.png';
 const Login = () => {
   const navigate = useNavigate();
   const { currentUser, loading } = useAuth();
+  const { t, language, toggleLanguage } = useLanguage();
 
   const [role, setRole] = useState('user');
   const [mode, setMode] = useState('login');
@@ -260,9 +262,29 @@ const Login = () => {
             </div>
 
             {/* Header */}
-            <div className="login-header">
-              <h2>{mode === 'login' ? 'Welcome Back!' : 'Create Account'}</h2>
-              <p>{mode === 'login' ? 'Sign in to continue to your account' : 'Fill in the details to get started'}</p>
+            <div className="login-header" style={{ position: 'relative' }}>
+              <button 
+                type="button"
+                className="lang-toggle-login"
+                onClick={toggleLanguage}
+                style={{ 
+                  position: 'absolute', 
+                  top: '-10px', 
+                  right: '0',
+                  background: 'var(--primary)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '4px 12px',
+                  borderRadius: '20px',
+                  fontSize: '0.8rem',
+                  cursor: 'pointer',
+                  fontWeight: '600'
+                }}
+              >
+                {language === 'en' ? 'தமிழ்' : 'English'}
+              </button>
+              <h2>{mode === 'login' ? t('login_welcome_back') : t('login_create_account')}</h2>
+              <p>{mode === 'login' ? t('login_subtitle_in') : t('login_subtitle_up')}</p>
             </div>
 
             {/* Alerts */}
@@ -292,7 +314,7 @@ const Login = () => {
                         type="text"
                         name="name"
                         className={`form-input ${getFieldStatusClass('name')}`}
-                        placeholder="Full Name"
+                        placeholder={t('login_full_name')}
                         value={formData.name}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -310,7 +332,7 @@ const Login = () => {
                       type="email"
                       name="email"
                       className={`form-input ${getFieldStatusClass('email')}`}
-                      placeholder="Email Address"
+                      placeholder={t('login_email')}
                       value={formData.email}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -327,7 +349,7 @@ const Login = () => {
                       type={showPassword ? 'text' : 'password'}
                       name="password"
                       className={`form-input ${getFieldStatusClass('password')}`}
-                      placeholder="Password"
+                      placeholder={t('login_password')}
                       value={formData.password}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -353,7 +375,7 @@ const Login = () => {
                         type={showConfirmPassword ? 'text' : 'password'}
                         name="confirmPassword"
                         className={`form-input ${getFieldStatusClass('confirmPassword')}`}
-                        placeholder="Confirm Password"
+                        placeholder={t('login_confirm_password')}
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -377,30 +399,30 @@ const Login = () => {
                 <div className="form-extras">
                   <label className="checkbox-group">
                     <input type="checkbox" />
-                    <span>Remember me</span>
+                    <span>{t('login_remember_me')}</span>
                   </label>
                   <span className="forgot-password" style={{cursor: 'pointer'}} onClick={handleForgotPassword}>
-                    Forgot Password?
+                    {t('login_forgot_password')}
                   </span>
                 </div>
               ) : (
                 <div className="form-extras" style={{ marginTop: '0.5rem' }}>
                   <label className="checkbox-group">
                     <input type="checkbox" required />
-                    <span>I agree to the <span className="terms-text">Terms & Conditions</span> and <span className="terms-text">Privacy Policy</span></span>
+                    <span>{t('login_agree_terms')}</span>
                   </label>
                 </div>
               )}
 
               <button type="submit" className="login-submit" disabled={isSubmitting}>
-                {isSubmitting ? <span className="spinner"></span> : (mode === 'login' ? 'Sign In' : 'Create Account')}
+                {isSubmitting ? <span className="spinner"></span> : (mode === 'login' ? t('login_sign_in_btn') : t('login_create_account'))}
               </button>
             </form>
 
             {/* Social Divider */}
             {role === 'user' && (
               <div className="login-divider">
-                <span>or continue with</span>
+                <span>{t('login_or_continue')}</span>
               </div>
             )}
 
@@ -408,7 +430,7 @@ const Login = () => {
             {role === 'user' && (
               <button type="button" className="google-btn" onClick={handleGoogleSignIn} disabled={isSubmitting}>
                 <FcGoogle size={20} />
-                Continue with Google
+                {t('login_google')}
               </button>
             )}
 
@@ -416,9 +438,9 @@ const Login = () => {
             {role === 'user' && (
               <div className="login-footer">
                 {mode === 'login' ? (
-                  <p>Don't have an account? <span onClick={() => toggleMode('register')}>Sign Up</span></p>
+                  <p>{t('login_no_account')} <span onClick={() => toggleMode('register')}>{t('login_sign_up')}</span></p>
                 ) : (
-                  <p>Already have an account? <span onClick={() => toggleMode('login')}>Sign In</span></p>
+                  <p>{t('login_has_account')} <span onClick={() => toggleMode('login')}>{t('login_sign_in')}</span></p>
                 )}
               </div>
             )}

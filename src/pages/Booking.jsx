@@ -5,6 +5,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { createBooking, getMyBookings, getUserRole, deleteBooking } from '../services/api';
 import { validators, TAMIL_NADU_DISTRICTS } from '../utils/validators';
 import { FiUser, FiPhone, FiMail, FiMapPin, FiMap, FiNavigation, FiCheck, FiArrowRight, FiArrowLeft, FiAlertCircle, FiCalendar, FiClock, FiTrash2 } from 'react-icons/fi';
@@ -12,6 +13,7 @@ import './Booking.css';
 
 const Booking = () => {
   const { currentUser } = useAuth();
+  const { t } = useLanguage();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -210,6 +212,18 @@ const Booking = () => {
         : `GP-${Date.now().toString().slice(-6)}`;
 
       setBookingRef(ref);
+
+      // Auto-update my bookings list
+      if (data?.bookingId) {
+        const newBooking = {
+          id: data.bookingId,
+          ...formData,
+          status: 'pending',
+          created_at: new Date().toISOString()
+        };
+        setMyBookings(prev => [newBooking, ...prev]);
+      }
+
       setIsSuccess(true);
       setShowConfetti(true);
 
@@ -309,12 +323,12 @@ const Booking = () => {
     return (
       <div className="my-bookings-section animate-fade-in-up delay-2">
         <div className="my-bookings-container">
-          <h2>My Bookings</h2>
+          <h2>{t('booking_my_bookings')}</h2>
           <div className="my-bookings-grid">
             {myBookings.map((booking) => (
               <div key={booking.id} className="my-booking-card">
                 <div className="my-booking-header">
-                  <span className="my-booking-id">#{booking.id}</span>
+                  <span className="my-booking-id">GP-{String(booking.id).padStart(4, '0')}</span>
                   {getStatusBadge(booking.status)}
                 </div>
                 
@@ -365,8 +379,8 @@ const Booking = () => {
       {/* Hero */}
       <div className="booking-hero">
         <div className="container">
-          <h1>Book Your <span className="text-gradient">Service</span></h1>
-          <p>Fill in your details and we&apos;ll get back to you within 24 hours</p>
+          <h1>{t('booking_hero_title')} <span className="text-gradient">{t('booking_hero_title_highlight')}</span></h1>
+          <p>{t('booking_hero_subtitle')}</p>
 
           {/* Progress */}
           {!isSuccess && (
@@ -418,7 +432,7 @@ const Booking = () => {
 
                   <div className="form-row">
                     <div className="form-group">
-                      <label className="form-label">Full Name *</label>
+                      <label className="form-label">{t('booking_form_name')}</label>
                       <input
                         type="text"
                         name="name"
@@ -432,7 +446,7 @@ const Booking = () => {
                     </div>
 
                     <div className="form-group">
-                      <label className="form-label">Phone Number *</label>
+                      <label className="form-label">{t('booking_form_phone')}</label>
                       <input
                         type="tel"
                         name="phone"
@@ -449,7 +463,7 @@ const Booking = () => {
 
                   <div className="form-row full">
                     <div className="form-group">
-                      <label className="form-label">Email Address *</label>
+                      <label className="form-label">{t('booking_form_email')}</label>
                       <input
                         type="email"
                         name="email"
@@ -491,7 +505,7 @@ const Booking = () => {
 
                   <div className="form-row full">
                     <div className="form-group">
-                      <label className="form-label">Address *</label>
+                      <label className="form-label">{t('booking_form_address')}</label>
                       <textarea
                         name="address"
                         className={getFieldClass('address')}
@@ -508,7 +522,7 @@ const Booking = () => {
 
                   <div className="form-row">
                     <div className="form-group">
-                      <label className="form-label">City *</label>
+                      <label className="form-label">{t('booking_form_city')}</label>
                       <input
                         type="text"
                         name="city"
@@ -522,7 +536,7 @@ const Booking = () => {
                     </div>
 
                     <div className="form-group">
-                      <label className="form-label">District *</label>
+                      <label className="form-label">{t('booking_form_district')}</label>
                       <select
                         name="district"
                         className={`form-select ${touched.district ? (errors.district ? 'error' : 'success') : ''}`}
@@ -541,7 +555,7 @@ const Booking = () => {
 
                   <div className="form-row full">
                     <div className="form-group">
-                      <label className="form-label">State</label>
+                      <label className="form-label">{t('booking_form_state')}</label>
                       <input
                         type="text"
                         className="form-input"
@@ -557,7 +571,7 @@ const Booking = () => {
                       <FiArrowLeft /> Back
                     </button>
                     <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-                      {isSubmitting ? <span className="spinner" style={{ width: 20, height: 20, border: '3px solid rgba(255,255,255,0.3)', borderTopColor: 'white', borderRadius: '50%', animation: 'rotate 0.8s linear infinite', display: 'inline-block' }}></span> : <>Submit Booking <FiCheck /></>}
+                      {isSubmitting ? <span className="spinner" style={{ width: 20, height: 20, border: '3px solid rgba(255,255,255,0.3)', borderTopColor: 'white', borderRadius: '50%', animation: 'rotate 0.8s linear infinite', display: 'inline-block' }}></span> : <>{t('booking_form_submit')} <FiCheck /></>}
                     </button>
                   </div>
                 </div>

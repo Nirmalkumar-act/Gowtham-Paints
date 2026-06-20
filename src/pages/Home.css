@@ -652,7 +652,7 @@
 
 @media (max-width: 768px) {
   .hero-title {
-    font-size: var(--text-3xl);
+    font-size: clamp(1.8rem, 8vw, 2.5rem);
   }
 
   .hero-stats {
@@ -666,6 +666,15 @@
 
   .counters-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+  }
+
+  .counter-card {
+    padding: var(--space-md);
+  }
+
+  .counter-value {
+    font-size: var(--text-2xl);
   }
 
   .hero-actions {

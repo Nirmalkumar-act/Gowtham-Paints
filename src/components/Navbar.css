@@ -393,7 +393,7 @@
 
   .notification-dropdown {
     width: 300px;
-    right: -60px;
+    right: -10px;
   }
 }
 
@@ -436,7 +436,8 @@
   }
 
   .notification-dropdown {
-    width: calc(100vw - 16px);
-    right: -60px;
+    width: calc(100vw - 32px);
+    right: -10px;
+    max-width: 350px;
   }
 }

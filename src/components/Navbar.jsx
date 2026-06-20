@@ -5,6 +5,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { getNotifications, markNotificationRead, markAllNotificationsRead } from '../services/api';
 import { FaPaintRoller } from 'react-icons/fa';
 import { FiHome, FiCalendar, FiImage, FiUser, FiSettings, FiBell, FiCheck } from 'react-icons/fi';
@@ -12,12 +13,14 @@ import './Navbar.css';
 
 const Navbar = () => {
   const { currentUser, isAdmin, isAuthenticated } = useAuth();
+  const { t, language, toggleLanguage } = useLanguage();
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [imgError, setImgError] = useState(false);
   const notifRef = useRef(null);
 
   // Handle scroll
@@ -119,26 +122,36 @@ const Navbar = () => {
           {/* Nav Links */}
           <div className={`navbar-links ${mobileOpen ? 'mobile-open' : ''}`}>
             <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
-              <FiHome className="nav-link-icon" /> Home
+              <FiHome className="nav-link-icon" /> {t('nav_home')}
             </NavLink>
             <NavLink to="/booking" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
-              <FiCalendar className="nav-link-icon" /> Book Now
+              <FiCalendar className="nav-link-icon" /> {t('nav_book')}
             </NavLink>
             <NavLink to="/gallery" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
-              <FiImage className="nav-link-icon" /> Gallery
+              <FiImage className="nav-link-icon" /> {t('nav_gallery')}
             </NavLink>
             {isAdmin && (
               <NavLink to="/admin/bookings" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
-                <FiSettings className="nav-link-icon" /> Manage
+                <FiSettings className="nav-link-icon" /> {t('nav_manage')}
               </NavLink>
             )}
             <NavLink to="/profile" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={() => setMobileOpen(false)}>
-              <FiUser className="nav-link-icon" /> Profile
+              <FiUser className="nav-link-icon" /> {t('nav_profile')}
             </NavLink>
           </div>
 
           {/* Actions */}
           <div className="navbar-actions">
+            
+            {/* Language Toggle */}
+            <button 
+              onClick={toggleLanguage} 
+              className="btn btn-sm btn-secondary" 
+              style={{ padding: '6px 12px', fontSize: '13px', fontWeight: 'bold', border: '1px solid var(--gray-200)', background: 'white' }}
+              title="Toggle Language"
+            >
+              {language === 'en' ? 'தமிழ்' : 'English'}
+            </button>
             {/* Notification Bell */}
             <div className="notification-wrapper" ref={notifRef}>
               <button
@@ -157,10 +170,10 @@ const Navbar = () => {
               {notifOpen && (
                 <div className="notification-dropdown">
                   <div className="notification-header">
-                    <h4>Notifications</h4>
+                    <h4>{t('nav_notifications')}</h4>
                     {unreadCount > 0 && (
                       <button className="mark-all-read" onClick={handleMarkAllRead}>
-                        Mark all read
+                        {t('nav_mark_all_read')}
                       </button>
                     )}
                   </div>
@@ -168,7 +181,7 @@ const Navbar = () => {
                     {notifications.length === 0 ? (
                       <div className="notification-empty">
                         <div className="notification-empty-icon">🔔</div>
-                        <p>No notifications yet</p>
+                        <p>{t('nav_no_notifications')}</p>
                       </div>
                     ) : (
                       notifications.map(notif => (
@@ -193,8 +206,12 @@ const Navbar = () => {
 
             {/* Profile Avatar */}
             <div className="nav-avatar" onClick={() => navigate('/profile')}>
-              {currentUser?.photoURL ? (
-                <img src={currentUser.photoURL} alt="Profile" />
+              {currentUser?.photoURL && !imgError ? (
+                <img 
+                  src={currentUser.photoURL} 
+                  alt="Profile" 
+                  onError={() => setImgError(true)}
+                />
               ) : (
                 <div className="nav-avatar-placeholder">
                   {getInitials()}

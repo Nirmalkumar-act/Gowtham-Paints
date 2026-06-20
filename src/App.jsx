@@ -4,6 +4,7 @@
 
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { LanguageProvider } from './context/LanguageContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -19,9 +20,10 @@ import SplashScreen from './components/SplashScreen';
 
 function App() {
   return (
-    <AuthProvider>
-      <SplashScreen />
-      <Router>
+    <LanguageProvider>
+      <AuthProvider>
+        <SplashScreen />
+        <Router>
         <Navbar />
         <Routes>
           {/* Public */}
@@ -75,6 +77,7 @@ function App() {
         </Routes>
       </Router>
     </AuthProvider>
+    </LanguageProvider>
   );
 }
 

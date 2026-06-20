@@ -4,11 +4,13 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 import { FaPaintRoller, FaHome, FaPalette, FaShieldAlt, FaTint, FaTools, FaHandshake, FaStar } from 'react-icons/fa';
 import { FiArrowRight, FiAward, FiUsers, FiClock, FiCheckCircle } from 'react-icons/fi';
 import './Home.css';
 
 const Home = () => {
+  const { t } = useLanguage();
   const [counters, setCounters] = useState({ projects: 0, customers: 0, years: 0, cities: 0 });
   const countersRef = useRef(null);
   const servicesRef = useRef(null);
@@ -16,12 +18,12 @@ const Home = () => {
 
   // Services data
   const services = [
-    { icon: <FaPaintRoller />, title: 'Interior Painting', desc: 'Transform your indoor spaces with premium quality paints and expert techniques. From accent walls to complete room makeovers.' },
-    { icon: <FaHome />, title: 'Exterior Painting', desc: 'Protect and beautify your building exterior with weather-resistant paints that last for years.' },
-    { icon: <FaPalette />, title: 'Texture Painting', desc: 'Add dimension and character with stunning texture finishes — stucco, knockdown, sand, and designer patterns.' },
-    { icon: <FaTint />, title: 'Waterproofing', desc: 'Keep your walls safe from moisture damage with professional waterproofing solutions.' },
-    { icon: <FaTools />, title: 'Wood Polishing', desc: 'Restore and protect wood surfaces with premium polishing and lacquer finish services.' },
-    { icon: <FaShieldAlt />, title: 'Wall Putty & Primer', desc: 'Prepare surfaces perfectly for a flawless paint finish with professional putty and primer application.' },
+    { icon: <FaPaintRoller />, title: t('home_srv_interior'), desc: t('home_srv_interior_desc') },
+    { icon: <FaHome />, title: t('home_srv_exterior'), desc: t('home_srv_exterior_desc') },
+    { icon: <FaPalette />, title: t('home_srv_texture'), desc: t('home_srv_texture_desc') },
+    { icon: <FaTint />, title: t('home_srv_waterproof'), desc: t('home_srv_waterproof_desc') },
+    { icon: <FaTools />, title: t('home_srv_wood'), desc: t('home_srv_wood_desc') },
+    { icon: <FaShieldAlt />, title: t('home_srv_consult'), desc: t('home_srv_consult_desc') },
   ];
 
   // Color palette
@@ -119,41 +121,39 @@ const Home = () => {
           <div className="hero-text">
             <div className="hero-badge">
               <span className="dot"></span>
-              #1 Paint Service in Tamil Nadu
+              {t('home_hero_badge')}
             </div>
 
             <h1 className="hero-title">
-              Transform Your Space With{' '}
-              <span className="highlight">Perfect Colors</span>
+              {t('home_hero_title1')} {t('home_hero_title2')}{' '}
+              <span className="highlight">{t('home_hero_title3')}</span>
             </h1>
 
             <p className="hero-description">
-              Premium paint and construction services across Tamil Nadu. 
-              From elegant interiors to durable exteriors — we bring your vision to life 
-              with expert craftsmanship and quality materials.
+              {t('home_hero_subtitle')}
             </p>
 
             <div className="hero-actions">
               <Link to="/booking" className="btn btn-primary btn-lg">
-                Book Now <FiArrowRight />
+                {t('home_hero_btn_book')} <FiArrowRight />
               </Link>
               <Link to="/gallery" className="btn btn-secondary btn-lg" style={{ borderColor: 'rgba(255,255,255,0.3)', color: 'white' }}>
-                View Gallery
+                {t('home_hero_btn_portfolio')}
               </Link>
             </div>
 
             <div className="hero-stats">
               <div className="hero-stat">
                 <div className="hero-stat-value">500+</div>
-                <div className="hero-stat-label">Projects Done</div>
+                <div className="hero-stat-label">{t('home_stat_projects')}</div>
               </div>
               <div className="hero-stat">
                 <div className="hero-stat-value">1200+</div>
-                <div className="hero-stat-label">Happy Customers</div>
+                <div className="hero-stat-label">{t('home_stat_satisfaction')}</div>
               </div>
               <div className="hero-stat">
                 <div className="hero-stat-value">10+</div>
-                <div className="hero-stat-label">Years Experience</div>
+                <div className="hero-stat-label">{t('home_stat_years')}</div>
               </div>
             </div>
           </div>
@@ -190,9 +190,9 @@ const Home = () => {
       <section className="services-section" ref={servicesRef}>
         <div className="container">
           <div className="section-header">
-            <span className="section-tag">Our Services</span>
-            <h2>What We <span className="text-gradient">Offer</span></h2>
-            <p>Professional painting and construction services tailored to your needs. Quality workmanship guaranteed.</p>
+            <span className="section-tag">{t('home_services_title')}</span>
+            <h2>{t('home_services_title')}</h2>
+            <p>{t('home_services_subtitle')}</p>
           </div>
 
           <div className="services-grid">
@@ -211,31 +211,31 @@ const Home = () => {
       <section className="why-section" ref={countersRef}>
         <div className="container">
           <div className="section-header">
-            <span className="section-tag">Why Choose Us</span>
-            <h2>Numbers That <span className="text-gradient">Speak</span></h2>
-            <p>A decade of excellence in painting and construction services across Tamil Nadu.</p>
+            <span className="section-tag">{t('home_why_title')}</span>
+            <h2>{t('home_why_title')}</h2>
+            <p>{t('home_why_subtitle')}</p>
           </div>
 
           <div className="counters-grid">
             <div className="counter-card">
               <div className="counter-icon">🏠</div>
               <div className="counter-value">{counters.projects}+</div>
-              <div className="counter-label">Projects Completed</div>
+              <div className="counter-label">{t('home_stat_projects')}</div>
             </div>
             <div className="counter-card">
               <div className="counter-icon">😊</div>
               <div className="counter-value">{counters.customers}+</div>
-              <div className="counter-label">Happy Customers</div>
+              <div className="counter-label">{t('home_stat_satisfaction')}</div>
             </div>
             <div className="counter-card">
               <div className="counter-icon">📅</div>
               <div className="counter-value">{counters.years}+</div>
-              <div className="counter-label">Years Experience</div>
+              <div className="counter-label">{t('home_stat_years')}</div>
             </div>
             <div className="counter-card">
               <div className="counter-icon">📍</div>
               <div className="counter-value">{counters.cities}</div>
-              <div className="counter-label">Districts Covered</div>
+              <div className="counter-label">{t('home_stat_cities')}</div>
             </div>
           </div>
         </div>
@@ -298,10 +298,10 @@ const Home = () => {
       <section className="cta-section">
         <div className="container">
           <div className="cta-content">
-            <h2>Ready to Transform Your Space?</h2>
-            <p>Book a free consultation today and let our experts help you choose the perfect colors.</p>
+            <h2>{t('home_cta_title')}</h2>
+            <p>{t('home_cta_subtitle')}</p>
             <Link to="/booking" className="cta-btn">
-              Book Free Consultation <FiArrowRight />
+              {t('home_cta_btn')} <FiArrowRight />
             </Link>
           </div>
         </div>

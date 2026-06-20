@@ -21,13 +21,17 @@ const AdminBookings = () => {
   const [viewModal, setViewModal] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
 
-  // Fetch bookings
+  // Fetch bookings periodically
   useEffect(() => {
     fetchBookings();
+    const interval = setInterval(() => {
+      fetchBookings(false); // fetch without setting loading to true
+    }, 30000); // 30 seconds
+    return () => clearInterval(interval);
   }, []);
 
-  const fetchBookings = async () => {
-    setLoading(true);
+  const fetchBookings = async (showLoading = true) => {
+    if (showLoading) setLoading(true);
     try {
       const { data } = await getBookings();
       if (data && data.bookings) {
@@ -321,7 +325,7 @@ const AdminBookings = () => {
                       </div>
                       <div className="booking-customer-info">
                         <h4>{booking.customer_name}</h4>
-                        <p>#{booking.id} • {booking.city}, {booking.district}</p>
+                        <p>GP-{String(booking.id).padStart(4, '0')} • {booking.city}, {booking.district}</p>
                       </div>
                     </div>
                     {getStatusBadge(booking.status)}
@@ -454,7 +458,7 @@ const AdminBookings = () => {
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
               <div>
-                <h3 style={{ marginBottom: '4px' }}>Project #{viewModal.id} Details</h3>
+                <h3 style={{ marginBottom: '4px' }}>Project GP-{String(viewModal.id).padStart(4, '0')} Details</h3>
                 {getStatusBadge(viewModal.status)}
               </div>
               <button className="btn btn-icon" style={{ background: 'var(--gray-100)', color: 'var(--text-secondary)' }} onClick={() => setViewModal(null)}>

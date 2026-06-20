@@ -5,6 +5,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { logoutUser } from '../services/firebase';
 import { getProfile, updateProfile as updateProfileApi, getBookings } from '../services/api';
 import { TAMIL_NADU_DISTRICTS, validators } from '../utils/validators';
@@ -14,12 +15,14 @@ import './Profile.css';
 
 const Profile = () => {
   const { currentUser, userRole, isAdmin, refreshProfile } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [bookings, setBookings] = useState([]);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [toast, setToast] = useState(null);
+  const [imgError, setImgError] = useState(false);
 
   const [formData, setFormData] = useState({
     name: currentUser?.displayName || '',
@@ -172,8 +175,12 @@ const Profile = () => {
             <div className="profile-header-content">
               <div className="profile-avatar-wrapper">
                 <div className="profile-avatar">
-                  {currentUser?.photoURL ? (
-                    <img src={currentUser.photoURL} alt="Profile" />
+                  {currentUser?.photoURL && !imgError ? (
+                    <img 
+                      src={currentUser.photoURL} 
+                      alt="Profile" 
+                      onError={() => setImgError(true)}
+                    />
                   ) : (
                     <div className="profile-avatar-placeholder">
                       {getInitials()}
@@ -202,15 +209,15 @@ const Profile = () => {
               <div className="profile-section-header">
                 <div className="profile-section-title">
                   <span className="section-icon"><FiUser /></span>
-                  Personal Information
+                  {t('profile_personal_info')}
                 </div>
                 {!isEditing ? (
                   <button className="btn btn-sm btn-secondary" onClick={() => setIsEditing(true)}>
-                    <FiEdit2 /> Edit
+                    <FiEdit2 /> {t('profile_edit')}
                   </button>
                 ) : (
                   <button className="btn btn-sm btn-primary" onClick={handleSave} disabled={saving}>
-                    <FiSave /> {saving ? 'Saving...' : 'Save'}
+                    <FiSave /> {saving ? t('profile_saving') : t('profile_save')}
                   </button>
                 )}
               </div>
@@ -307,7 +314,7 @@ const Profile = () => {
             {/* Logout */}
             <div className="profile-logout">
               <button className="btn btn-danger" onClick={() => setShowLogoutConfirm(true)}>
-                <FiLogOut /> Logout
+                <FiLogOut /> {t('profile_logout')}
               </button>
             </div>
           </div>
@@ -319,16 +326,16 @@ const Profile = () => {
         <div className="modal-overlay" onClick={() => setShowLogoutConfirm(false)}>
           <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '400px', textAlign: 'center' }}>
             <div style={{ fontSize: '3rem', marginBottom: 'var(--space-md)' }}>👋</div>
-            <h3>Logout</h3>
+            <h3>{t('profile_logout')}</h3>
             <p style={{ color: 'var(--text-secondary)', margin: 'var(--space-md) 0 var(--space-xl)' }}>
-              Are you sure you want to logout? You&apos;ll need to sign in again.
+              {t('profile_confirm_logout')}
             </p>
             <div className="modal-actions" style={{ justifyContent: 'center' }}>
               <button className="btn btn-secondary" onClick={() => setShowLogoutConfirm(false)}>
-                Cancel
+                {t('profile_cancel')}
               </button>
               <button className="btn btn-danger" onClick={handleLogout}>
-                <FiLogOut /> Yes, Logout
+                <FiLogOut /> {t('profile_yes_logout')}
               </button>
             </div>
           </div>

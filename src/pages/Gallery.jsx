@@ -5,6 +5,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { getGalleryItems, addGalleryItem, deleteGalleryItem } from '../services/api';
 import { FaStar, FaPlus, FaPaintBrush } from 'react-icons/fa';
 import { FiImage, FiUpload, FiX, FiTrash2, FiEye, FiCamera } from 'react-icons/fi';
@@ -12,6 +13,7 @@ import './Gallery.css';
 
 const Gallery = () => {
   const { isAdmin } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -169,10 +171,10 @@ const Gallery = () => {
         <div className="container">
           <div className="gallery-hero-content">
             <div className="gallery-hero-badge">
-              <FaPaintBrush /> Our Portfolio
+              <FaPaintBrush /> {t('gallery_badge')}
             </div>
-            <h1>Our <span className="text-gradient">Gallery</span></h1>
-            <p>Explore our stunning painting & construction projects across Tamil Nadu</p>
+            <h1>{t('gallery_title')}</h1>
+            <p>{t('gallery_subtitle')}</p>
           </div>
         </div>
       </div>
@@ -185,7 +187,7 @@ const Gallery = () => {
             <div className="gallery-toolbar-left">
               <span className="gallery-count">
                 <FiImage />
-                {items.length} {items.length === 1 ? 'project' : 'projects'}
+                {items.length} {t('gallery_projects')}
               </span>
             </div>
 
@@ -253,7 +255,7 @@ const Gallery = () => {
                     <div className="gallery-card-hover-overlay">
                       <div className="overlay-action">
                         <FiEye />
-                        <span>View Project</span>
+                        <span>{t('gallery_view_project')}</span>
                       </div>
                     </div>
 
@@ -300,7 +302,7 @@ const Gallery = () => {
               <div className="gallery-empty-icon">
                 <FiImage />
               </div>
-              <h3>No Projects Yet</h3>
+              <h3>{t('gallery_no_projects')}</h3>
               <p>
                 {isAdmin
                   ? 'Start showcasing your work by adding your first project photo!'

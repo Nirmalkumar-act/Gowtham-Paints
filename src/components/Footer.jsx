@@ -3,11 +3,13 @@
    ============================================ */
 
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 import { FaPaintRoller } from 'react-icons/fa';
 import { FiMapPin, FiPhone, FiMail, FiInstagram, FiFacebook, FiYoutube } from 'react-icons/fi';
 import './Footer.css';
 
 const Footer = () => {
+  const { t } = useLanguage();
   return (
     <footer className="footer">
       <div className="footer-wave">
@@ -28,8 +30,7 @@ const Footer = () => {
                 <span className="footer-logo-text">Gowtham Paints</span>
               </div>
               <p className="footer-desc">
-                Premium paint and construction services in Tamil Nadu. 
-                Transform your spaces with our expert team and quality materials.
+                {t('footer_desc')}
               </p>
               <div className="footer-socials">
                 <a href="#" className="social-link" aria-label="Facebook"><FiFacebook /></a>
@@ -40,30 +41,30 @@ const Footer = () => {
 
             {/* Quick Links */}
             <div className="footer-section">
-              <h4>Quick Links</h4>
+              <h4>{t('footer_quick_links')}</h4>
               <div className="footer-links">
-                <Link to="/">Home</Link>
-                <Link to="/booking">Book Now</Link>
-                <Link to="/gallery">Gallery</Link>
-                <Link to="/profile">My Account</Link>
+                <Link to="/">{t('nav_home')}</Link>
+                <Link to="/booking">{t('nav_book')}</Link>
+                <Link to="/gallery">{t('nav_gallery')}</Link>
+                <Link to="/profile">{t('nav_profile')}</Link>
               </div>
             </div>
 
             {/* Services */}
             <div className="footer-section">
-              <h4>Services</h4>
+              <h4>{t('footer_services')}</h4>
               <div className="footer-links">
-                <span>Interior Painting</span>
-                <span>Exterior Painting</span>
-                <span>Texture Painting</span>
-                <span>Waterproofing</span>
-                <span>Wood Polishing</span>
+                <span>{t('home_srv_interior')}</span>
+                <span>{t('home_srv_exterior')}</span>
+                <span>{t('home_srv_texture')}</span>
+                <span>{t('home_srv_waterproof')}</span>
+                <span>{t('home_srv_wood')}</span>
               </div>
             </div>
 
             {/* Contact */}
             <div className="footer-section">
-              <h4>Contact Us</h4>
+              <h4>{t('footer_contact')}</h4>
               <div className="footer-contact">
                 <div className="contact-item">
                   <FiMapPin />
@@ -85,7 +86,7 @@ const Footer = () => {
 
       <div className="footer-bottom">
         <div className="container">
-          <p>© {new Date().getFullYear()} Gowtham Paints. All rights reserved.</p>
+          <p>{t('footer_copyright')}</p>
           <p>Built with ❤️ for beautiful spaces</p>
         </div>
       </div>

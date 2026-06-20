@@ -21,6 +21,7 @@ const GalleryDetail = () => {
   const [reviewText, setReviewText] = useState('');
   const [reviewError, setReviewError] = useState('');
   const [submittingReview, setSubmittingReview] = useState(false);
+  const [fetchError, setFetchError] = useState('');
 
   useEffect(() => {
     fetchItem();
@@ -28,25 +29,27 @@ const GalleryDetail = () => {
 
   const fetchItem = async () => {
     setLoading(true);
+    setFetchError('');
     try {
-      const { data } = await getGalleryItem(id);
-      if (data && data.item) {
+      const { data, error } = await getGalleryItem(id);
+      if (error) {
+        setFetchError(error);
+        setItem(null);
+      } else if (data && data.item) {
         setItem(data.item);
       } else {
-        setItem(getDemoItem());
+        setFetchError('Project not found');
+        setItem(null);
       }
-    } catch {
-      setItem(getDemoItem());
+    } catch (err) {
+      setFetchError(err.message || 'Something went wrong');
+      setItem(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const getDemoItem = () => {
-    return {
-      id: Number(id), title: 'Project Not Found', description: '', category: 'Interior', avg_rating: 0, total_reviews: 0, color: '#E65100', images: [], reviews: []
-    };
-  };
+  // Demo item fallback removed to expose real errors
 
   const handleSubmitReview = async (e) => {
     e.preventDefault();
@@ -116,7 +119,7 @@ const GalleryDetail = () => {
     return (
       <div className="detail-page">
         <div className="container" style={{ textAlign: 'center', paddingTop: '120px' }}>
-          <h2>Project not found</h2>
+          <h2>{fetchError || 'Project not found'}</h2>
           <Link to="/gallery" className="btn btn-primary" style={{ marginTop: '20px' }}>Back to Gallery</Link>
         </div>
       </div>

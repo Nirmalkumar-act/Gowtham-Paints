@@ -9,9 +9,45 @@ const db = require('../config/db');
 // GET /api/notifications - Get user notifications
 router.get('/', async (req, res) => {
   try {
-    // Get all notifications (in production, filter by authenticated user)
+    // Extract user from JWT token
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const token = authHeader.split(' ')[1];
+    let firebaseUid = null;
+    let userEmail = null;
+    
+    try {
+      const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+      firebaseUid = payload.user_id || payload.sub;
+      userEmail = payload.email;
+    } catch (e) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+
+    // Find actual user ID in database
+    let users = [];
+    if (firebaseUid) {
+      const [result] = await db.query('SELECT id FROM users WHERE firebase_uid = ?', [firebaseUid]);
+      users = result;
+    }
+    if (users.length === 0 && userEmail) {
+      const [result] = await db.query('SELECT id FROM users WHERE email = ?', [userEmail]);
+      users = result;
+    }
+
+    if (users.length === 0) {
+      return res.status(401).json({ message: 'User not found in database' });
+    }
+
+    const userId = users[0].id;
+
+    // Get notifications for authenticated user
     const [notifications] = await db.query(
-      'SELECT * FROM notifications ORDER BY created_at DESC LIMIT 50'
+      'SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT 50',
+      [userId]
     );
     res.json({ notifications });
   } catch (error) {
