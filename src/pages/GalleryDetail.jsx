@@ -7,7 +7,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getGalleryItem, addReview } from '../services/api';
 import { FaStar } from 'react-icons/fa';
-import { FiArrowLeft, FiSend, FiAlertCircle } from 'react-icons/fi';
+import { FiArrowLeft, FiSend, FiAlertCircle, FiX } from 'react-icons/fi';
 import './Gallery.css';
 
 const GalleryDetail = () => {
@@ -16,6 +16,7 @@ const GalleryDetail = () => {
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [reviewRating, setReviewRating] = useState(0);
   const [reviewHover, setReviewHover] = useState(0);
   const [reviewText, setReviewText] = useState('');
@@ -147,7 +148,7 @@ const GalleryDetail = () => {
         <div className="detail-content">
           {/* Images */}
           <div className="detail-images">
-            <div className="detail-main-image">
+            <div className="detail-main-image" onClick={() => setIsLightboxOpen(true)} style={{ cursor: 'pointer' }}>
               {isUrl(currentImg) ? (
                 <img src={getImgSrc(currentImg)} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
@@ -272,6 +273,32 @@ const GalleryDetail = () => {
           </div>
         </div>
       </div>
+
+      {isLightboxOpen && (
+        <div className="lightbox-overlay" onClick={() => setIsLightboxOpen(false)}>
+          <button className="lightbox-close" onClick={() => setIsLightboxOpen(false)}>
+            <FiX size={30} />
+          </button>
+          <div className="lightbox-content" onClick={e => e.stopPropagation()}>
+            {isUrl(currentImg) ? (
+              <img src={getImgSrc(currentImg)} alt={item.title} />
+            ) : (
+              <div style={{
+                width: '80vw',
+                height: '80vh',
+                background: `linear-gradient(135deg, ${currentImg}, ${currentImg}88)`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '10rem',
+                borderRadius: '16px'
+              }}>
+                🎨
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

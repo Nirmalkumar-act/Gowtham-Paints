@@ -183,7 +183,7 @@
   border: none;
   border-bottom: 2px solid #eaeaea;
   color: #333;
-  padding: 0.75rem 0 0.75rem 2rem; /* space for icon */
+  padding: 0.75rem 2.5rem 0.75rem 2.5rem; /* space for icon on both sides */
   font-size: 0.95rem;
   transition: all 0.3s ease;
   outline: none;
@@ -341,8 +341,8 @@
   color: #ef4444;
   font-size: 0.75rem;
   margin-top: 0.5rem;
-  position: absolute;
-  bottom: -20px;
+  position: static;
+  display: block;
 }
 
 .login-alert {

@@ -2,7 +2,7 @@
    PROFILE PAGE - Gowtham Paints
    ============================================ */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -23,6 +23,20 @@ const Profile = () => {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [toast, setToast] = useState(null);
   const [imgError, setImgError] = useState(false);
+  const fileInputRef = useRef(null);
+
+  const handleEditPictureClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      showToast('Profile picture upload simulation successful! Selected: ' + file.name);
+    }
+  };
 
   const [formData, setFormData] = useState({
     name: currentUser?.displayName || '',
@@ -174,6 +188,13 @@ const Profile = () => {
           <div className="profile-header">
             <div className="profile-header-content">
               <div className="profile-avatar-wrapper">
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  style={{ display: 'none' }} 
+                  accept="image/*" 
+                  onChange={handleFileChange} 
+                />
                 <div className="profile-avatar">
                   {currentUser?.photoURL && !imgError ? (
                     <img 
@@ -187,7 +208,7 @@ const Profile = () => {
                     </div>
                   )}
                 </div>
-                <div className="profile-avatar-edit">
+                <div className="profile-avatar-edit" onClick={handleEditPictureClick} style={{ cursor: 'pointer' }}>
                   <FiEdit2 />
                 </div>
               </div>

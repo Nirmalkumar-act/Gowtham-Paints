@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { FaPaintRoller, FaHome, FaPalette, FaShieldAlt, FaTint, FaTools, FaHandshake, FaStar } from 'react-icons/fa';
-import { FiArrowRight, FiAward, FiUsers, FiClock, FiCheckCircle } from 'react-icons/fi';
+import { FiArrowRight, FiArrowLeft, FiAward, FiUsers, FiClock, FiCheckCircle } from 'react-icons/fi';
 import './Home.css';
 
 const Home = () => {
@@ -14,7 +14,18 @@ const Home = () => {
   const [counters, setCounters] = useState({ projects: 0, customers: 0, years: 0, cities: 0 });
   const countersRef = useRef(null);
   const servicesRef = useRef(null);
+  const testimonialsRef = useRef(null);
   const hasAnimated = useRef(false);
+
+  const scrollTestimonials = (direction) => {
+    if (testimonialsRef.current) {
+      const scrollAmount = 370;
+      testimonialsRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   // Services data
   const services = [
@@ -268,9 +279,17 @@ const Home = () => {
             <span className="section-tag">Testimonials</span>
             <h2>What Our <span className="text-gradient">Customers Say</span></h2>
             <p>Real reviews from real customers across Tamil Nadu.</p>
+            <div className="testimonials-controls" style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '20px' }}>
+              <button onClick={() => scrollTestimonials('left')} className="testimonial-btn" aria-label="Previous">
+                <FiArrowLeft />
+              </button>
+              <button onClick={() => scrollTestimonials('right')} className="testimonial-btn" aria-label="Next">
+                <FiArrowRight />
+              </button>
+            </div>
           </div>
 
-          <div className="testimonials-track">
+          <div className="testimonials-track" ref={testimonialsRef}>
             {testimonials.map((review, i) => (
               <div key={i} className="testimonial-card">
                 <div className="testimonial-stars">
