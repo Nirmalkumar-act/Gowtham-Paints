@@ -29,8 +29,13 @@ app.use(cors({
     if (origin.endsWith('.vercel.app')) {
       return callback(null, true);
     }
+
+    // Allow ALL onrender.com domains
+    if (origin.endsWith('.onrender.com')) {
+      return callback(null, true);
+    }
     
-    callback(new Error('Not allowed by CORS'));
+    callback(new Error('Not allowed by CORS: ' + origin));
   },
   credentials: true
 }));
