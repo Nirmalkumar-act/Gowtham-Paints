@@ -30,40 +30,63 @@ router.post('/sync', async (req, res) => {
       [firebase_uid]
     );
 
+    let userRecord = null;
+
     if (existingByUid.length > 0) {
       // Update existing user - always enforce correct role for admin
       await db.query(
         'UPDATE users SET name = COALESCE(?, name), email = ?, role = ?, profile_photo = COALESCE(?, profile_photo) WHERE firebase_uid = ?',
         [name, email, role, profile_photo, firebase_uid]
       );
+      const [updated] = await db.query('SELECT * FROM users WHERE firebase_uid = ?', [firebase_uid]);
+      userRecord = updated[0];
       console.log(`✅ User synced (by uid): ${email} -> role: ${role}`);
-      return res.json({ message: 'User synced', userId: existingByUid[0].id, role });
-    }
-
-    // Check if user exists by email (e.g., admin with placeholder uid)
-    const [existingByEmail] = await db.query(
-      'SELECT id, role FROM users WHERE email = ?',
-      [email]
-    );
-
-    if (existingByEmail.length > 0) {
-      // User exists by email but with different firebase_uid - update the uid and role
-      await db.query(
-        'UPDATE users SET firebase_uid = ?, name = COALESCE(?, name), role = ?, profile_photo = COALESCE(?, profile_photo) WHERE email = ?',
-        [firebase_uid, name, role, profile_photo, email]
+    } else {
+      // Check if user exists by email (e.g., admin with placeholder uid)
+      const [existingByEmail] = await db.query(
+        'SELECT id, role FROM users WHERE email = ?',
+        [email]
       );
-      console.log(`✅ User synced (by email): ${email} -> role: ${role}`);
-      return res.json({ message: 'User synced', userId: existingByEmail[0].id, role });
+
+      if (existingByEmail.length > 0) {
+        // User exists by email but with different firebase_uid - update the uid and role
+        await db.query(
+          'UPDATE users SET firebase_uid = ?, name = COALESCE(?, name), role = ?, profile_photo = COALESCE(?, profile_photo) WHERE email = ?',
+          [firebase_uid, name, role, profile_photo, email]
+        );
+        const [updated] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+        userRecord = updated[0];
+        console.log(`✅ User synced (by email): ${email} -> role: ${role}`);
+      } else {
+        // Create new user
+        const [result] = await db.query(
+          'INSERT INTO users (firebase_uid, name, email, role, profile_photo) VALUES (?, ?, ?, ?, ?)',
+          [firebase_uid, name || 'User', email, role, profile_photo || null]
+        );
+        const [newUser] = await db.query('SELECT * FROM users WHERE id = ?', [result.insertId]);
+        userRecord = newUser[0];
+        console.log(`✅ New user created: ${email} -> role: ${role}`);
+      }
     }
 
-    // Create new user
-    const [result] = await db.query(
-      'INSERT INTO users (firebase_uid, name, email, role, profile_photo) VALUES (?, ?, ?, ?, ?)',
-      [firebase_uid, name || 'User', email, role, profile_photo || null]
-    );
+    const profile = {
+      id: userRecord.id,
+      name: userRecord.name,
+      email: userRecord.email,
+      phone: userRecord.phone,
+      address: userRecord.address,
+      city: userRecord.city,
+      district: userRecord.district,
+      state: userRecord.state,
+      profile_photo: userRecord.profile_photo
+    };
 
-    console.log(`✅ New user created: ${email} -> role: ${role}`);
-    res.status(201).json({ message: 'User created', userId: result.insertId, role });
+    res.status(existingByUid.length > 0 ? 200 : 201).json({
+      message: 'User synced',
+      userId: userRecord.id,
+      role: userRecord.role,
+      profile
+    });
   } catch (error) {
     console.error('Sync user error:', error);
     res.status(500).json({ message: 'Server error' });

@@ -12,10 +12,39 @@ const db = require('../config/db');
 const storage = multer.memoryStorage();
 const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
 
+// Helper to get authenticated user ID
+async function getUserIdFromReq(req) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
+  const token = authHeader.split(' ')[1];
+  let firebaseUid = null;
+  let userEmail = null;
+  try {
+    const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+    firebaseUid = payload.user_id || payload.sub;
+    userEmail = payload.email;
+  } catch (e) {
+    return null;
+  }
+  let users = [];
+  if (firebaseUid) {
+    const [res] = await db.query('SELECT id FROM users WHERE firebase_uid = ?', [firebaseUid]);
+    users = res;
+  }
+  if (users.length === 0 && userEmail) {
+    const [res] = await db.query('SELECT id FROM users WHERE email = ?', [userEmail]);
+    users = res;
+  }
+  return users.length > 0 ? users[0].id : null;
+}
+
 // GET /api/profile
 router.get('/', async (req, res) => {
   try {
-    const [users] = await db.query('SELECT * FROM users ORDER BY updated_at DESC LIMIT 1');
+    const userId = await getUserIdFromReq(req);
+    if (!userId) return res.status(401).json({ message: 'Unauthorized' });
+
+    const [users] = await db.query('SELECT * FROM users WHERE id = ?', [userId]);
     if (users.length > 0) {
       const { firebase_uid, ...profile } = users[0];
       return res.json({ profile });
@@ -30,6 +59,9 @@ router.get('/', async (req, res) => {
 // PUT /api/profile
 router.put('/', async (req, res) => {
   try {
+    const userId = await getUserIdFromReq(req);
+    if (!userId) return res.status(401).json({ message: 'Unauthorized' });
+
     const { name, phone, address, city, district } = req.body;
 
     await db.query(
@@ -39,8 +71,8 @@ router.put('/', async (req, res) => {
         address = COALESCE(?, address), 
         city = COALESCE(?, city), 
         district = COALESCE(?, district)
-       WHERE id = (SELECT id FROM (SELECT id FROM users ORDER BY updated_at DESC LIMIT 1) as t)`,
-      [name, phone, address, city, district]
+       WHERE id = ?`,
+      [name, phone, address, city, district, userId]
     );
 
     res.json({ message: 'Profile updated' });
@@ -53,6 +85,9 @@ router.put('/', async (req, res) => {
 // POST /api/profile/photo
 router.post('/photo', upload.single('photo'), async (req, res) => {
   try {
+    const userId = await getUserIdFromReq(req);
+    if (!userId) return res.status(401).json({ message: 'Unauthorized' });
+
     if (!req.file) {
       return res.status(400).json({ message: 'No photo provided' });
     }
@@ -60,9 +95,8 @@ router.post('/photo', upload.single('photo'), async (req, res) => {
     const photoUrl = `data:${req.file.mimetype};base64,${b64}`;
     
     await db.query(
-      `UPDATE users SET profile_photo = ? 
-       WHERE id = (SELECT id FROM (SELECT id FROM users ORDER BY updated_at DESC LIMIT 1) as t)`,
-      [photoUrl]
+      `UPDATE users SET profile_photo = ? WHERE id = ?`,
+      [photoUrl, userId]
     );
 
     res.json({ message: 'Photo updated', photoUrl });

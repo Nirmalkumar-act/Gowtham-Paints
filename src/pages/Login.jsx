@@ -45,11 +45,11 @@ const Login = () => {
 
   useEffect(() => {
     // Only auto-redirect if the user was ALREADY logged in when they arrived.
-    // If isLoggingIn is true, our login handlers will handle the redirect via window.location.href.
+    // If isLoggingIn is true, our login handlers will handle the redirect.
     if (!loading && currentUser && !isLoggingIn.current) {
-      window.location.href = '/';
+      navigate('/');
     }
-  }, [currentUser, loading]);
+  }, [currentUser, loading, navigate]);
 
   const getFriendlyErrorMessage = (errorString) => {
     if (!errorString) return 'An unknown error occurred.';
@@ -167,11 +167,10 @@ const Login = () => {
         if (error) {
           setGeneralError(getFriendlyErrorMessage(error));
         } else if (user) {
-          // Full page reload triggers the splash screen in App.jsx
           if (role === 'admin') {
-            window.location.href = '/admin/bookings';
+            navigate('/admin/bookings');
           } else {
-            window.location.href = '/';
+            navigate('/');
           }
           return; // prevent finally block from resetting isSubmitting
         }
@@ -184,7 +183,7 @@ const Login = () => {
         if (error) {
           setGeneralError(getFriendlyErrorMessage(error));
         } else if (user) {
-          window.location.href = '/';
+          navigate('/');
           return;
         }
       }
@@ -204,7 +203,7 @@ const Login = () => {
       if (error) {
         setGeneralError(getFriendlyErrorMessage(error));
       } else if (user) {
-        window.location.href = '/';
+        navigate('/');
         return;
       }
     } catch (err) {

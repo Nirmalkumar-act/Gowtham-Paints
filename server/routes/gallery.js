@@ -9,7 +9,15 @@ const path = require('path');
 const db = require('../config/db');
 
 // Configure multer for image uploads
-const storage = multer.memoryStorage();
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '../uploads/'));
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + '-' + file.originalname.replace(/\s+/g, '-'));
+  }
+});
 
 const upload = multer({
   storage,
@@ -100,12 +108,10 @@ router.post('/', upload.array('images', 20), async (req, res) => {
 
     if (req.files && req.files.length > 0) {
       const coverFile = req.files[0];
-      const coverB64 = Buffer.from(coverFile.buffer).toString('base64');
-      coverImageUrl = `data:${coverFile.mimetype};base64,${coverB64}`;
+      coverImageUrl = `/uploads/${coverFile.filename}`;
       for (let i = 1; i < req.files.length; i++) {
         const file = req.files[i];
-        const additionalB64 = Buffer.from(file.buffer).toString('base64');
-        additionalImages.push(`data:${file.mimetype};base64,${additionalB64}`);
+        additionalImages.push(`/uploads/${file.filename}`);
       }
     }
 
@@ -142,8 +148,7 @@ router.post('/:id/images', upload.array('images', 5), async (req, res) => {
     // For now, update the main image
     if (req.files && req.files.length > 0) {
       const file = req.files[0];
-      const b64 = Buffer.from(file.buffer).toString('base64');
-      const imageUrl = `data:${file.mimetype};base64,${b64}`;
+      const imageUrl = `/uploads/${file.filename}`;
       await db.query('UPDATE gallery_items SET image_url = ? WHERE id = ?', [imageUrl, req.params.id]);
     }
     res.json({ message: 'Images added' });

@@ -36,16 +36,19 @@ export const AuthProvider = ({ children }) => {
             profile_photo: user.photoURL || ''
           });
 
-          // Use role from sync response if available
+          // Use role and profile from sync response if available
           if (syncResult.data && syncResult.data.role) {
             setUserRole(syncResult.data.role);
           }
-
-          // Get full user profile and role from /role endpoint
-          const { data } = await getUserRole();
-          if (data) {
-            setUserRole(data.role);
-            setUserProfile(data.profile);
+          if (syncResult.data && syncResult.data.profile) {
+            setUserProfile(syncResult.data.profile);
+          } else {
+            // Fallback: Get full user profile and role from /role endpoint
+            const { data } = await getUserRole();
+            if (data) {
+              setUserRole(data.role);
+              setUserProfile(data.profile);
+            }
           }
         } catch (err) {
           console.error('Error syncing user:', err);

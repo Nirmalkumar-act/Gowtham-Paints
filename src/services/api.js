@@ -3,10 +3,10 @@
    ============================================ */
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { auth } from './firebase';
 
 // Helper to get auth token
 const getAuthHeaders = async () => {
-  const { auth } = await import('./firebase');
   const user = auth.currentUser;
   if (user) {
     const token = await user.getIdToken();
@@ -45,7 +45,6 @@ const apiRequest = async (endpoint, options = {}) => {
 // For file uploads
 const apiUpload = async (endpoint, formData) => {
   try {
-    const { auth } = await import('./firebase');
     const user = auth.currentUser;
     const headers = {};
     if (user) {
